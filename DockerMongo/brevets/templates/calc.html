@@ -118,6 +118,7 @@
          <script type="text/javascript">
             var SCRIPT_ROOT = {{ request.script_root|tojson|safe }} ;
             var TIME_CALC_URL = SCRIPT_ROOT + "/_calc_times";
+            var DISPLAY_URL = SCRIPT_ROOT + "/display";
 
   
             // TODO: when start time or brevet distance change, already-entered rows don't refresh/recalculate
@@ -183,12 +184,15 @@
 
                // TODO: 2 more event handlers for change in brevet_dist or start_time
 
-               // add in event handlers for button clicks P5  
+               // add in event handlers for button clicks P5 
                
                $('#submit').click(
                   function(e) {
                      e.preventDefault();
                      // TODO: oh no! I forgot to include brevet_distance and start_time!
+                     // not a project requirement - save for if I have time later
+                     //var brevet_distance = $("#brevet_dist_km").val();
+                     //var start_time = $("#begin_date").val();
                      var rows = [];
                      $('.control').each(function(index, element) {
                         var ident = index;
@@ -206,20 +210,22 @@
                         }
                      });
                      console.log(rows); // it also works!
+                     //var race_info = {"brevet_distance": brevet_distance, "start_time": start_time, "controles": rows};
                      // TODO: how to trigger response function? 
-                     $.post('/insert', rows, insert_response(response), "json");
+                     $.post('/insert', rows, insert_response(), "json");
                      // TODO: continue to display these values? alert message that distances were saved?
                   }
                );
-            function insert_response(response) {
+            function insert_response() {
                alert("saved brevet controle times");
                console.log("received response");
             };
-
+/*
                $('#display').click(
                   function(e){
                      e.preventDefault();
                      // get array of JSON objects from API
+                     $.getJSON(DISPLAY_URL).done(function(data){
                      //var saved_brevet = $.getJSON(<API>, <JSON object>, <success function>);
                      // loop through DOM and display them 
                      // start with brevet_distance and start_time
@@ -231,10 +237,14 @@
                      target.val( saved_brevet.kms );
                      // Then calculate times for this entry
                      calc_times(control_entry);
-                  }
-               ); 
-
-               });
+                     }).fail(function(err){
+                     // In case you get an error...
+                     console.log("Error!");
+                     console.log(err);
+                     });
+                     */
+                  });
+                  
             // TODO: function to re-calculate all rows
          </script>
       </div>

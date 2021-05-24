@@ -11,6 +11,7 @@ from flask import Flask, redirect, url_for, request, render_template
 import arrow  # Replacement for datetime, based on moment.js
 import acp_times  # Brevet time calculations
 import config
+from db_methods import Db
 
 from pymongo import MongoClient
 
@@ -23,8 +24,11 @@ app = flask.Flask(__name__)
 CONFIG = config.configuration()
 # app.secret_key = CONFIG.SECRET_KEY
 
-client = MongoClient('mongodb://' + os.environ['MONGODB_HOSTNAME'], 27017)
-db = client.brevetdb  # name of the database we're using
+# moved connection with MongoDB to db_methods
+# client = MongoClient('mongodb://' + os.environ['MONGODB_HOSTNAME'], 27017)
+# db = client.brevetdb  # name of the database we're using
+
+db = Db()
 
 ###
 # Pages
@@ -40,8 +44,10 @@ def index():
 
 @app.route("/insert", methods=["POST"])
 def insert():
-    # TODO: I think we're supposed to clear the database first, using drop
     db.drop()
+    # TODO: insert distance and start time - only if there's time
+    # db.brevetcoll.insert_one(request.form['brevet_distance'])
+    # db.brevetcoll.insert_one(request.form['start_time'])
     # TODO: surely rows has to come from somewhere! But when do we use form and when get?
     rows = request.form.get("rows")
     for row in rows:
@@ -57,14 +63,16 @@ def insert():
             'notes': request.form['notes']
         }
         # brevetcoll is the collection we're using to track controles
-        db.brevetcoll.insert_one(item_doc)
+        db.insert_row(item_doc)
+    # TODO: how to refresh page but also return a message to calc.html?
+    # return redirect(url_for('index'))
     return("Successfully saved brevet controle times")
 
 
 @app.route("/display")
-def display():
+def display(self):
     return render_template('index.html',
-                           items=list(db.brevetcoll.find()))
+                           items=list(db.find_content()))
 
 
 @app.errorhandler(404)
