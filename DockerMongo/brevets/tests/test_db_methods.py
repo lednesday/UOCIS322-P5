@@ -8,4 +8,10 @@ def test_db_methods():
     db = Db()
     db.insert_row(test_obj)
     list_of_dicts = list(db.find_content())
-    db.drop_all({"ident": 300})
+    kilometers = 0
+    for dict in list_of_dicts:
+        if dict['kms'] == 50:
+            kilometers = 50
+    assert kilometers == 50
+    # db.drop_all({"ident": 300}) # generates error
+    db.drop_all()  # this is bad - clears out entire db instead of just this test insertion

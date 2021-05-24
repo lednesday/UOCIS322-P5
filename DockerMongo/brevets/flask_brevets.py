@@ -65,8 +65,8 @@ def insert():
         # brevetcoll is the collection we're using to track controles
         db.insert_row(item_doc)
     # TODO: how to refresh page but also return a message to calc.html?
-    # return redirect(url_for('index'))
-    return("Successfully saved brevet controle times")
+    return redirect(url_for('index'))
+    # return("Successfully saved brevet controle times")
 
 
 @app.route("/display")
