@@ -7,7 +7,7 @@ Replacement for RUSA ACP brevet time calculator
 import os  # for environment - TODO: maybe not necessary because of config?
 import flask
 # borrowed from example
-from flask import Flask, redirect, url_for, request, render_template
+from flask import Flask, redirect, url_for, request, render_template, jsonify
 import arrow  # Replacement for datetime, based on moment.js
 import acp_times  # Brevet time calculations
 import config
@@ -63,7 +63,7 @@ def insert():
         # brevetcoll is the collection we're using to track controles
         db.insert_row(item_doc)
     # TODO: how to refresh page but also return a message to calc.html?
-    return jsonify({"status": success})
+    return jsonify({"status": "success"})
 
 
 @app.route("/display")
