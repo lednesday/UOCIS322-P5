@@ -12,6 +12,7 @@ import arrow  # Replacement for datetime, based on moment.js
 import acp_times  # Brevet time calculations
 import config
 from db_methods import Db
+import json
 
 from pymongo import MongoClient
 
@@ -44,29 +45,25 @@ def index():
 
 @app.route("/insert", methods=["POST"])
 def insert():
-    db.drop()
+    db.drop_all()
     # TODO: insert distance and start time - only if there's time
     # db.brevetcoll.insert_one(request.form['brevet_distance'])
     # db.brevetcoll.insert_one(request.form['start_time'])
-    # TODO: surely rows has to come from somewhere! But when do we use form and when get?
-    rows = request.form.get("rows")
+    rows = json.loads(request.form.get("rows"))
     for row in rows:
         # {ident: ident, miles: miles, kms: kms, loc: loc, open: open, close: close, notes: notes}
         item_doc = {
-            # should be 'row_num': row['ident'] instead?
-            'row_num': request.form['ident'],
-            'miles': request.form['miles'],
-            'kms': request.form['kms'],
-            'location': request.form['loc'],
-            'open_time': request.form['open'],
-            'close_time': request.form['close'],
-            'notes': request.form['notes']
+            'row_num': row['ident'],
+            'miles': row['miles'],
+            'kms': row['kms'],
+            'location': row['loc'],
+            'open_time': row['open'],
+            'close_time': row['close']
         }
         # brevetcoll is the collection we're using to track controles
         db.insert_row(item_doc)
     # TODO: how to refresh page but also return a message to calc.html?
-    return redirect(url_for('index'))
-    # return("Successfully saved brevet controle times")
+    return jsonify({"status": success})
 
 
 @app.route("/display")

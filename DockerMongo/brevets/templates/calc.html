@@ -202,9 +202,9 @@
                            var loc = $(element).find("input[name='location']").val();
                            var open = $(element).find("input[name='open']").val();
                            var close = $(element).find("input[name='close']").val();
-                           var notes = $(element).find("input[name='notes']").val();
+                           // var notes = $(element).find("input[name='notes']").val();
                            var row = {ident: ident, miles: miles, kms: kms, loc: loc, 
-                              open: open, close: close, notes: notes};
+                              open: open, close: close};
                            rows.push(row);
                            console.log(row); // it works!
                         }
@@ -212,7 +212,7 @@
                      console.log(rows); // it also works!
                      //var race_info = {"brevet_distance": brevet_distance, "start_time": start_time, "controles": rows};
                      // TODO: how to trigger response function? 
-                     $.post('/insert', rows, insert_response(), "json");
+                     $.post('/insert', {"rows": JSON.stringify(rows)}, insert_response(), "json");
                      // TODO: continue to display these values? alert message that distances were saved?
                   }
                );

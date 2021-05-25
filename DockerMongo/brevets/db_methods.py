@@ -21,3 +21,6 @@ class Db:
 
     def find_content(self, key={}):
         return self.db.brevetcoll.find(key)
+
+    def drop_one(self, key={}):
+        self.db.brevetcoll.remove(key)
