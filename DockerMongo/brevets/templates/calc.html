@@ -119,6 +119,7 @@
             var SCRIPT_ROOT = {{ request.script_root|tojson|safe }} ;
             var TIME_CALC_URL = SCRIPT_ROOT + "/_calc_times";
             var DISPLAY_URL = SCRIPT_ROOT + "/display";
+            var REFRESH_URL = SCRIPT_ROOT + "/index";
 
   
             // TODO: when start time or brevet distance change, already-entered rows don't refresh/recalculate
@@ -213,12 +214,12 @@
                      //var race_info = {"brevet_distance": brevet_distance, "start_time": start_time, "controles": rows};
                      // TODO: how to trigger response function? 
                      $.post('/insert', {"rows": JSON.stringify(rows)}, insert_response(), "json");
-                     // TODO: continue to display these values? alert message that distances were saved?
                   }
                );
             function insert_response() {
-               alert("submitted brevet controle times");
-               console.log("received response");
+               console.log("submitted brevet controle times");
+               // refresh (to clear controle times that have been saved to db)
+               window.location.reload();
             };
 
                $('#display').click(
@@ -226,22 +227,25 @@
                      e.preventDefault();
                      console.log("display clicked"); // even this doesn't work
                      // get array of JSON objects from API
+                     //TODO: itms is not defined
+                     $.getJSON(DISPLAY_URL, {items: itms}, function(itms){
                      //$.getJSON(DISPLAY_URL).done(function(data){
-                     //var saved_brevet = $.getJSON(<API>, <JSON object>, <success function>);
+                     // var saved_brevet = $.getJSON(<API>, <JSON object>, <success function>);
                      // loop through DOM and display them 
                      // then get each row, I guess
+                     console.log("got display data?");
                      //var control_entry = $(this).parents(".control")
                      //var target = control_entry.find("input[name='km']");
                      //target.val( saved_brevet.kms );
                      // Then calculate times for this entry
                      //calc_times(control_entry);
-                    // }).fail(function(err){
+                     }).fail(function(err){
                      // In case you get an error...
-                     //console.log("Error!");
-                     //console.log(err);
-                     });
-                     
+                     console.log("Error!");
+                     console.log(err);
+                     });                    
                   });
+            });
                   
             // TODO: function to re-calculate all rows
          </script>

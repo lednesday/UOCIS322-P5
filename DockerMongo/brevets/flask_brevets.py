@@ -62,12 +62,12 @@ def insert():
         }
         # brevetcoll is the collection we're using to track controles
         db.insert_row(item_doc)
-    # TODO: how to refresh page but also return a message to calc.html?
     return jsonify({"status": "success"})
 
 
 @app.route("/display")
-def display(self):
+def display():
+    # TODO: should I instead return a JSON list for my display event handler?
     return render_template('index.html',
                            items=list(db.find_content()))
 
