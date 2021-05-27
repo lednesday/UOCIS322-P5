@@ -225,22 +225,23 @@
                $('#display').click(
                   function(e){
                      e.preventDefault();
-                     console.log("display clicked"); // even this doesn't work
                      // get array of JSON objects from API
-                     //TODO: itms is not defined
                      $.getJSON(DISPLAY_URL, {}, function(itms){
                      // $.getJSON(DISPLAY_URL).done(function(data){ // would also work
-                     console.log("got display data?");
                      console.log("itms: ", itms);
                      // loop through DOM and display them 
-                     for(var i = 0; i < itms.length; i++){
-                        // then get each row, I guess
-                        var control_entry = $(this).parents(".control")
-                        //var target = control_entry.find("input[name='km']");
-                        //target.val( saved_brevet.kms );
-                        // Then calculate times for this entry
-                        //calc_times(control_entry);
-                     }
+                     var num_items = itms.length;
+                     var index = 0;
+                     $('.control').each(function(index, element){
+                        if(index < num_items){
+                           $(element).find("input[name='miles']").val(itms[index]['miles']);
+                           $(element).find("input[name='km']").val(itms[index]['kms']);
+                           $(element).find("input[name='location']").val(itms[index]['location']);
+                           $(element).find("input[name='open']").val(itms[index]['open_time']);
+                           $(element).find("input[name='close']").val(itms[index]['close_time']);
+                           index++;
+                        }
+                     });
 
                      }).fail(function(err){
                      // In case you get an error...
