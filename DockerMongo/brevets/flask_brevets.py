@@ -67,9 +67,10 @@ def insert():
 
 @app.route("/display")
 def display():
-    # TODO: should I instead return a JSON list for my display event handler?
-    return render_template('index.html',
-                           items=list(db.find_content()))
+    items = list(db.find_content())
+    for item in items:
+        del item["_id"]
+    return jsonify(items)
 
 
 @app.errorhandler(404)

@@ -228,17 +228,20 @@
                      console.log("display clicked"); // even this doesn't work
                      // get array of JSON objects from API
                      //TODO: itms is not defined
-                     $.getJSON(DISPLAY_URL, {items: itms}, function(itms){
-                     //$.getJSON(DISPLAY_URL).done(function(data){
-                     // var saved_brevet = $.getJSON(<API>, <JSON object>, <success function>);
-                     // loop through DOM and display them 
-                     // then get each row, I guess
+                     $.getJSON(DISPLAY_URL, {}, function(itms){
+                     // $.getJSON(DISPLAY_URL).done(function(data){ // would also work
                      console.log("got display data?");
-                     //var control_entry = $(this).parents(".control")
-                     //var target = control_entry.find("input[name='km']");
-                     //target.val( saved_brevet.kms );
-                     // Then calculate times for this entry
-                     //calc_times(control_entry);
+                     console.log("itms: ", itms);
+                     // loop through DOM and display them 
+                     for(var i = 0; i < itms.length; i++){
+                        // then get each row, I guess
+                        var control_entry = $(this).parents(".control")
+                        //var target = control_entry.find("input[name='km']");
+                        //target.val( saved_brevet.kms );
+                        // Then calculate times for this entry
+                        //calc_times(control_entry);
+                     }
+
                      }).fail(function(err){
                      // In case you get an error...
                      console.log("Error!");
